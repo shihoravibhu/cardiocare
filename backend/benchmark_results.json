@@ -1,0 +1,78 @@
+{
+  "dataset_split": "80/20 train-test split (56,000 train / 14,000 test records)",
+  "champion": "Gradient Boosting",
+  "models": [
+    {
+      "model": "Gradient Boosting",
+      "test_accuracy": 73.557,
+      "roc_auc": 80.04,
+      "precision": 75.27,
+      "recall": 70.13,
+      "f1_score": 72.61,
+      "rank": "1",
+      "rank_display": "1st",
+      "is_champion": true,
+      "status": "Integrated & Serving (Champion)"
+    },
+    {
+      "model": "Random Forest",
+      "test_accuracy": 73.1,
+      "roc_auc": 79.6,
+      "precision": 75.1,
+      "recall": 69.07,
+      "f1_score": 71.96,
+      "rank": "2",
+      "rank_display": "2nd",
+      "is_champion": false,
+      "status": "Integrated & Serving"
+    },
+    {
+      "model": "Decision Tree",
+      "test_accuracy": 72.8,
+      "roc_auc": 79.06,
+      "precision": 73.36,
+      "recall": 71.56,
+      "f1_score": 72.45,
+      "rank": "3",
+      "rank_display": "3rd",
+      "is_champion": false,
+      "status": "Evaluated"
+    },
+    {
+      "model": "Logistic Regression",
+      "test_accuracy": 72.093,
+      "roc_auc": 77.74,
+      "precision": 75.81,
+      "recall": 64.85,
+      "f1_score": 69.9,
+      "rank": "4",
+      "rank_display": "4th",
+      "is_champion": false,
+      "status": "Evaluated"
+    },
+    {
+      "model": "K-Nearest Neighbors",
+      "test_accuracy": 71.85,
+      "roc_auc": 76.87,
+      "precision": 73.03,
+      "recall": 69.24,
+      "f1_score": 71.08,
+      "rank": "5",
+      "rank_display": "5th",
+      "is_champion": false,
+      "status": "Evaluated"
+    },
+    {
+      "model": "Gaussian Naive Bayes",
+      "test_accuracy": 66.064,
+      "roc_auc": 75.89,
+      "precision": 76.2,
+      "recall": 46.67,
+      "f1_score": 57.88,
+      "rank": "6",
+      "rank_display": "6th",
+      "is_champion": false,
+      "status": "Evaluated"
+    }
+  ]
+}
