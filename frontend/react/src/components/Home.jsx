@@ -75,6 +75,7 @@ export default function Home() {
           }}>
             <svg 
               viewBox="0 0 1200 100" 
+              className="ecg-live-line"
               style={{ 
                 width: '100%', 
                 height: '100%', 
@@ -82,8 +83,7 @@ export default function Home() {
                 fill: 'none', 
                 strokeWidth: '2.5', 
                 strokeLinecap: 'round', 
-                strokeLinejoin: 'round',
-                filter: 'drop-shadow(0 0 8px rgba(244, 63, 94, 0.65))'
+                strokeLinejoin: 'round'
               }}
             >
               <path d="M 0 50 L 250 50 L 270 50 L 285 20 L 300 80 L 315 10 L 330 90 L 345 50 L 365 50 L 400 50 L 650 50 L 670 50 L 685 20 L 700 80 L 715 10 L 730 90 L 745 50 L 765 50 L 800 50 L 1050 50 L 1070 50 L 1085 20 L 1100 80 L 1115 10 L 1130 90 L 1145 50 L 1200 50" />
@@ -133,35 +133,55 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Telemetry / Live Stats Section */}
-      <section style={{ maxWidth: '1200px', margin: '4rem auto', padding: '0 2rem' }}>
+      {/* Telemetry / Live Stats Section (Apple Staggered Reveal) */}
+      <motion.section 
+        initial={{ opacity: 0, y: 35 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+        style={{ maxWidth: '1200px', margin: '4rem auto', padding: '0 2rem' }}
+      >
         <div className="grid-4">
-          <div className="stat-card">
-            <div style={{ color: 'var(--accent)' }}><Database size={22} /></div>
-            <div className="stat-value">70,000+</div>
-            <div className="stat-label">Verified Clinical Cohort</div>
-          </div>
-          <div className="stat-card">
-            <div style={{ color: '#f43f5e' }}><Heart size={22} /></div>
-            <div className="stat-value">14</div>
-            <div className="stat-label">Synthesized Biomarkers</div>
-          </div>
-          <div className="stat-card">
-            <div style={{ color: '#10b981' }}><Zap size={22} /></div>
-            <div className="stat-value">&lt; 130ms</div>
-            <div className="stat-label">In-Memory Inference</div>
-          </div>
-          <div className="stat-card">
-            <div style={{ color: '#a855f7' }}><ShieldCheck size={22} /></div>
-            <div className="stat-value">100%</div>
-            <div className="stat-label">Zero-Retention Privacy</div>
-          </div>
+          {[
+            { icon: Database, color: 'var(--accent)', value: '70,000+', label: 'Verified Clinical Cohort' },
+            { icon: Heart, color: '#f43f5e', value: '14', label: 'Synthesized Biomarkers' },
+            { icon: Zap, color: '#10b981', value: '< 130ms', label: 'In-Memory Inference' },
+            { icon: ShieldCheck, color: '#a855f7', value: '100%', label: 'Zero-Retention Privacy' }
+          ].map((stat, idx) => {
+            const Icon = stat.icon;
+            return (
+              <motion.div
+                key={stat.label}
+                className="stat-card"
+                initial={{ opacity: 0, y: 28, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.7, delay: idx * 0.09, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div style={{ color: stat.color }}><Icon size={22} /></div>
+                <div className="stat-value">{stat.value}</div>
+                <div className="stat-label">{stat.label}</div>
+              </motion.div>
+            );
+          })}
         </div>
-      </section>
+      </motion.section>
 
-      {/* Precision Pillars Section */}
-      <section style={{ maxWidth: '1200px', margin: '6rem auto', padding: '0 2rem' }}>
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+      {/* Precision Pillars Section (Apple Luxury Scroll Reveal) */}
+      <motion.section 
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+        style={{ maxWidth: '1200px', margin: '6rem auto', padding: '0 2rem' }}
+      >
+        <motion.div 
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          style={{ textAlign: 'center', marginBottom: '4rem' }}
+        >
           <div className="section-tag">
             <Layers size={14} />
             <span>Clinical Innovations</span>
@@ -170,67 +190,94 @@ export default function Home() {
           <p className="hero-subtitle" style={{ margin: '0 auto', fontSize: '18px' }}>
             Traditional diagnostics rely on isolated thresholds. CardioCare computes cross-biomarker non-linear dependencies.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid-3">
-          <BorderGlow
-            borderRadius={24}
-            glowRadius={35}
-            glowIntensity={1.0}
-            glowColor="199 95 65"
-            colors={['#38bdf8', '#818cf8', '#c084fc']}
-            backgroundColor="rgba(12, 17, 28, 0.7)"
-            innerStyle={{ padding: '2.25rem' }}
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--accent)' }}>
-              <Cpu size={24} />
-            </div>
-            <h3 style={{ fontSize: '22px', margin: '0 0 0.75rem 0', fontWeight: 700 }}>Ensemble Random Forest</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, margin: 0 }}>
-              Utilizes an ensemble of 100 decorrelated decision trees, aggregating bootstrap votes to suppress variance and prevent single-tree overfitting on outlier vitals.
-            </p>
-          </BorderGlow>
+            <BorderGlow
+              borderRadius={24}
+              glowRadius={35}
+              glowIntensity={1.0}
+              glowColor="199 95 65"
+              colors={['#38bdf8', '#818cf8', '#c084fc']}
+              backgroundColor="rgba(12, 17, 28, 0.7)"
+              innerStyle={{ padding: '2.25rem' }}
+            >
+              <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--accent)' }}>
+                <Cpu size={24} />
+              </div>
+              <h3 style={{ fontSize: '22px', margin: '0 0 0.75rem 0', fontWeight: 700 }}>Ensemble Random Forest</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, margin: 0 }}>
+                Utilizes an ensemble of 100 decorrelated decision trees, aggregating bootstrap votes to suppress variance and prevent single-tree overfitting on outlier vitals.
+              </p>
+            </BorderGlow>
+          </motion.div>
 
-          <BorderGlow
-            borderRadius={24}
-            glowRadius={35}
-            glowIntensity={1.0}
-            glowColor="349 90 65"
-            colors={['#f43f5e', '#fb7185', '#ec4899']}
-            backgroundColor="rgba(12, 17, 28, 0.7)"
-            innerStyle={{ padding: '2.25rem' }}
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.17, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(244, 63, 94, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: '#f43f5e' }}>
-              <Activity size={24} />
-            </div>
-            <h3 style={{ fontSize: '22px', margin: '0 0 0.75rem 0', fontWeight: 700 }}>Hemodynamic Synthesis</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, margin: 0 }}>
-              Synthesizes real-time physiological metrics: Body Mass Index (BMI), Pulse Pressure (systolic minus diastolic vascular stiffness), and AHA/ACC Stage 1 & 2 Hypertension flags.
-            </p>
-          </BorderGlow>
+            <BorderGlow
+              borderRadius={24}
+              glowRadius={35}
+              glowIntensity={1.0}
+              glowColor="349 90 65"
+              colors={['#f43f5e', '#fb7185', '#ec4899']}
+              backgroundColor="rgba(12, 17, 28, 0.7)"
+              innerStyle={{ padding: '2.25rem' }}
+            >
+              <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(244, 63, 94, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: '#f43f5e' }}>
+                <Activity size={24} />
+              </div>
+              <h3 style={{ fontSize: '22px', margin: '0 0 0.75rem 0', fontWeight: 700 }}>Hemodynamic Synthesis</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, margin: 0 }}>
+                Synthesizes real-time physiological metrics: Body Mass Index (BMI), Pulse Pressure (systolic minus diastolic vascular stiffness), and AHA/ACC Stage 1 & 2 Hypertension flags.
+              </p>
+            </BorderGlow>
+          </motion.div>
 
-          <BorderGlow
-            borderRadius={24}
-            glowRadius={35}
-            glowIntensity={1.0}
-            glowColor="160 84 60"
-            colors={['#10b981', '#34d399', '#38bdf8']}
-            backgroundColor="rgba(12, 17, 28, 0.7)"
-            innerStyle={{ padding: '2.25rem' }}
+          <motion.div
+            initial={{ opacity: 0, y: 35, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.29, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: '#10b981' }}>
-              <ShieldCheck size={24} />
-            </div>
-            <h3 style={{ fontSize: '22px', margin: '0 0 0.75rem 0', fontWeight: 700 }}>Zero-Retention Privacy</h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, margin: 0 }}>
-              Patient biometrics are evaluated strictly in volatile RAM. No medical records, IP addresses, or patient markers are persisted to disk or external databases.
-            </p>
-          </BorderGlow>
+            <BorderGlow
+              borderRadius={24}
+              glowRadius={35}
+              glowIntensity={1.0}
+              glowColor="160 84 60"
+              colors={['#10b981', '#34d399', '#38bdf8']}
+              backgroundColor="rgba(12, 17, 28, 0.7)"
+              innerStyle={{ padding: '2.25rem' }}
+            >
+              <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: '#10b981' }}>
+                <ShieldCheck size={24} />
+              </div>
+              <h3 style={{ fontSize: '22px', margin: '0 0 0.75rem 0', fontWeight: 700 }}>Zero-Retention Privacy</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '15px', lineHeight: 1.7, margin: 0 }}>
+                Patient biometrics are evaluated strictly in volatile RAM. No medical records, IP addresses, or patient markers are persisted to disk or external databases.
+              </p>
+            </BorderGlow>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Model Benchmark Matrix */}
-      <section style={{ maxWidth: '1000px', margin: '6rem auto', padding: '0 2rem' }}>
+      {/* Model Benchmark Matrix (Apple Float-in Glass Card) */}
+      <motion.section 
+        initial={{ opacity: 0, y: 45, scale: 0.98 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        style={{ maxWidth: '1000px', margin: '6rem auto', padding: '0 2rem' }}
+      >
         <BorderGlow
           borderRadius={28}
           glowRadius={42}
@@ -252,7 +299,13 @@ export default function Home() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {/* Champion Gradient Boosting */}
-            <div style={{ background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.4)', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+            <motion.div 
+              initial={{ opacity: 0, x: -16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              style={{ background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.4)', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#fbbf24', boxShadow: '0 0 10px #fbbf24' }}></div>
                 <div>
@@ -273,10 +326,16 @@ export default function Home() {
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>ROC-AUC</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* CardioCare Random Forest */}
-            <div style={{ background: 'rgba(56, 189, 248, 0.06)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+            <motion.div 
+              initial={{ opacity: 0, x: -16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+              style={{ background: 'rgba(56, 189, 248, 0.06)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 10px var(--accent)' }}></div>
                 <div>
@@ -297,10 +356,16 @@ export default function Home() {
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>ROC-AUC</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Standard Decision Tree */}
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+            <motion.div 
+              initial={{ opacity: 0, x: -16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.26, ease: [0.16, 1, 0.3, 1] }}
+              style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--text-muted)' }}></div>
                 <div>
@@ -318,10 +383,16 @@ export default function Home() {
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>ROC-AUC</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Logistic Regression */}
-            <div style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+            <motion.div 
+              initial={{ opacity: 0, x: -16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
+              style={{ background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--text-muted)' }}></div>
                 <div>
@@ -339,7 +410,7 @@ export default function Home() {
                   <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>ROC-AUC</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Link to Full Insights Table */}
             <div style={{ textAlign: 'center', marginTop: '1rem' }}>
@@ -350,10 +421,16 @@ export default function Home() {
             </div>
           </div>
         </BorderGlow>
-      </section>
+      </motion.section>
 
-      {/* Call to Action Banner */}
-      <section style={{ maxWidth: '1000px', margin: '6rem auto 2rem auto', padding: '0 2rem' }}>
+      {/* Call to Action Banner (Apple Elevating Glass Card) */}
+      <motion.section 
+        initial={{ opacity: 0, y: 50, scale: 0.97 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        style={{ maxWidth: '1000px', margin: '6rem auto 2rem auto', padding: '0 2rem' }}
+      >
         <BorderGlow
           borderRadius={32}
           glowRadius={50}
@@ -374,7 +451,7 @@ export default function Home() {
             <ArrowRight size={18} />
           </Link>
         </BorderGlow>
-      </section>
+      </motion.section>
     </div>
   );
 }

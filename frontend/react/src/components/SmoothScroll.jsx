@@ -26,14 +26,14 @@ export default function SmoothScroll({ children }) {
       return;
     }
 
-    // High-precision 120Hz / 144Hz desktop wheel smooth scrolling
+    // High-precision 120Hz / 144Hz desktop wheel smooth scrolling (Apple signature glide)
     const lenis = new Lenis({
-      duration: 0.85, // Snappy, instant response; avoids the floaty 60Hz feeling
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 1.15, // Golden ratio for Apple MacBook trackpad/wheel glide
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Apple's exact exponential deceleration
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.0,
+      wheelMultiplier: 1.05,
       autoRaf: true, // Native sub-millisecond 120Hz display refresh synchronization
       infinite: false,
     });

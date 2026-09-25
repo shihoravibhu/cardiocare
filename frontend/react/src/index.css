@@ -894,24 +894,44 @@ body {
   line-height: 1;
 }
 
-/* Stats Metric Cards */
+/* Stats Metric Cards (Apple GPU-Accelerated Elevation) */
 .stat-card {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--border-color);
   border-radius: 18px;
   padding: 1.5rem;
   text-align: left;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .stat-card:hover {
-  transform: translateY(-2.5px);
-  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-4px) translateZ(0);
+  border-color: rgba(56, 189, 248, 0.35);
   background: rgba(255, 255, 255, 0.045);
-  box-shadow: 0 16px 32px -6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(56, 189, 248, 0.2);
+}
+
+/* Apple Clinical ECG Live Heartbeat Glow */
+@keyframes ecg-glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.5));
+    opacity: 0.88;
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(244, 63, 94, 0.95)) drop-shadow(0 0 25px rgba(244, 63, 94, 0.4));
+    opacity: 1;
+  }
+}
+
+.ecg-live-line {
+  animation: ecg-glow-pulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: filter, opacity;
 }
 
 .stat-value {
