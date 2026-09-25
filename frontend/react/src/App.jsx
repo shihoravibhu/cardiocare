@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
@@ -9,6 +10,7 @@ import About from './components/About';
 import GhostFibers from './components/GhostFibers';
 import GradualBlur from './components/GradualBlur';
 import SmoothScroll from './components/SmoothScroll';
+import Preloader from './components/Preloader';
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -25,9 +27,15 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
-    <Router>
-      <SmoothScroll>
+    <>
+      <AnimatePresence>
+        {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
+      <Router>
+        <SmoothScroll>
         {/* Living WebGL GhostFibers Luxury Atmosphere */}
       <div className="ghost-fibers-bg-wrapper">
         <GhostFibers
@@ -85,6 +93,7 @@ function App() {
       <Footer />
       </SmoothScroll>
     </Router>
+    </>
   );
 }
 
