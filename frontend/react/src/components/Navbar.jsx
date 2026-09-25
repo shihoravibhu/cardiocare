@@ -31,54 +31,65 @@ export default function Navbar() {
     { to: '/about', label: 'Architecture', icon: Layers, end: false },
   ];
 
+  const toggleMenu = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setIsOpen((prev) => !prev);
+  };
+
   return (
-    <header className="nav-container">
-      <nav className="nav">
-        {/* Brand Link */}
-        <NavLink to="/" className="brand-link" onClick={() => setIsOpen(false)}>
-          <div className="brand-logo-glow">
-            <Heart size={18} fill="white" />
-          </div>
-          <span className="brand-text">
-            Cardio<span style={{ color: 'var(--accent)' }}>Care</span>
-          </span>
-          <span className="brand-pill">AI v1.1</span>
-        </NavLink>
-
-        {/* Desktop Nav Links */}
-        <div className="nav-links">
-          {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.end}>
-              {item.label}
-            </NavLink>
-          ))}
-        </div>
-
-        {/* Desktop Actions */}
-        <div className="nav-cta">
-          <div className="status-pill">
-            <span className="status-dot"></span>
-            <span>Online</span>
-          </div>
-
-          <NavLink to="/predictor" className="btn-nav-action">
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Activity size={14} />
-              <span>Assess Risk</span>
+    <>
+      <header className="nav-container">
+        <nav className="nav">
+          {/* Brand Link */}
+          <NavLink to="/" className="brand-link" onClick={() => setIsOpen(false)}>
+            <div className="brand-logo-glow">
+              <Heart size={18} fill="white" />
+            </div>
+            <span className="brand-text">
+              Cardio<span style={{ color: 'var(--accent)' }}>Care</span>
             </span>
+            <span className="brand-pill">AI v1.1</span>
           </NavLink>
 
-          {/* Mobile Hamburger Toggle */}
-          <button
-            type="button"
-            className="mobile-menu-btn"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-          >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-      </nav>
+          {/* Desktop Nav Links */}
+          <div className="nav-links">
+            {navItems.map((item) => (
+              <NavLink key={item.to} to={item.to} end={item.end}>
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+
+          {/* Desktop Actions */}
+          <div className="nav-cta">
+            <div className="status-pill">
+              <span className="status-dot"></span>
+              <span>Online</span>
+            </div>
+
+            <NavLink to="/predictor" className="btn-nav-action">
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Activity size={14} />
+                <span>Assess Risk</span>
+              </span>
+            </NavLink>
+
+            {/* Mobile Hamburger Toggle */}
+            <button
+              type="button"
+              className="mobile-menu-btn"
+              onClick={toggleMenu}
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </nav>
+      </header>
 
       {/* Luxury Mobile Navigation Drawer */}
       <AnimatePresence>
@@ -89,7 +100,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
+              transition={{ duration: 0.2 }}
               className="mobile-nav-backdrop"
               onClick={() => setIsOpen(false)}
             />
@@ -98,9 +109,10 @@ export default function Navbar() {
             <motion.div
               initial={{ opacity: 0, y: -20, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.96 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              exit={{ opacity: 0, y: 0, scale: 1 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               className="mobile-nav-sheet"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="mobile-nav-header">
                 <div className="status-pill">
@@ -164,6 +176,6 @@ export default function Navbar() {
           </>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

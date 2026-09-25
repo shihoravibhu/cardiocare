@@ -22,7 +22,7 @@ export default function SmoothScroll({ children }) {
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1.05,
-      touchMultiplier: 1.6,
+      touchMultiplier: 0,
       infinite: false,
     });
 

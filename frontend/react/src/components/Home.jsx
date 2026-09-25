@@ -107,17 +107,19 @@ export default function Home() {
                 alt="AI Cardiovascular Intelligence" 
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'contrast(1.05)' }} 
               />
-              <GradualBlur
-                target="parent"
-                position="bottom"
-                height="10rem"
-                strength={4}
-                divCount={7}
-                curve="bezier"
-                exponential={true}
-                tint="rgba(8, 12, 22, 0.92)"
-                opacity={1}
-              />
+              <div className="hero-blur-overlay">
+                <GradualBlur
+                  target="parent"
+                  position="bottom"
+                  height="3.5rem"
+                  strength={1.5}
+                  divCount={5}
+                  curve="bezier"
+                  exponential={false}
+                  tint="rgba(8, 12, 22, 0.45)"
+                  opacity={0.8}
+                />
+              </div>
             </div>
           </BorderGlow>
         </motion.div>
