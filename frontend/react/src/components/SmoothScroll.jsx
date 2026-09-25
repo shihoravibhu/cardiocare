@@ -13,31 +13,35 @@ export default function SmoothScroll({ children }) {
   const location = useLocation();
 
   useEffect(() => {
-    // Apple-grade ease-out-expo inertia physics
+    // Detect mobile touchscreens (smartphones, tablets)
+    const isTouch =
+      typeof window !== 'undefined' &&
+      ('ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia('(pointer: coarse)').matches);
+
+    // On mobile touchscreens, DO NOT attach synthetic scroll listeners.
+    // Native mobile OS hardware momentum scrolling runs on the GPU compositor at true 120Hz with zero input lag.
+    if (isTouch) {
+      return;
+    }
+
+    // High-precision 120Hz / 144Hz desktop wheel smooth scrolling
     const lenis = new Lenis({
-      duration: 1.25,
-      // Apple MacBook Pro deceleration formula
+      duration: 0.85, // Snappy, instant response; avoids the floaty 60Hz feeling
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.05,
-      touchMultiplier: 0,
+      wheelMultiplier: 1.0,
+      autoRaf: true, // Native sub-millisecond 120Hz display refresh synchronization
       infinite: false,
     });
 
     lenisRef.current = lenis;
     window.__lenis = lenis;
 
-    let animId;
-    function raf(time) {
-      lenis.raf(time);
-      animId = requestAnimationFrame(raf);
-    }
-    animId = requestAnimationFrame(raf);
-
     return () => {
-      cancelAnimationFrame(animId);
       lenis.destroy();
       lenisRef.current = null;
       delete window.__lenis;

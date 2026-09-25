@@ -73,13 +73,21 @@ export default function Home() {
             overflow: 'hidden',
             boxShadow: '0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)'
           }}>
-            <svg viewBox="0 0 1200 100" style={{ width: '100%', height: '100%', stroke: '#f43f5e', fill: 'none', strokeWidth: '2.5', strokeLinecap: 'round', strokeLinejoin: 'round' }}>
+            <svg 
+              viewBox="0 0 1200 100" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                stroke: '#f43f5e', 
+                fill: 'none', 
+                strokeWidth: '2.5', 
+                strokeLinecap: 'round', 
+                strokeLinejoin: 'round',
+                filter: 'drop-shadow(0 0 8px rgba(244, 63, 94, 0.65))'
+              }}
+            >
               <path d="M 0 50 L 250 50 L 270 50 L 285 20 L 300 80 L 315 10 L 330 90 L 345 50 L 365 50 L 400 50 L 650 50 L 670 50 L 685 20 L 700 80 L 715 10 L 730 90 L 745 50 L 765 50 L 800 50 L 1050 50 L 1070 50 L 1085 20 L 1100 80 L 1115 10 L 1130 90 L 1145 50 L 1200 50" />
             </svg>
-            <div className="hero-ecg-badge">
-              <Activity size={16} color="#f43f5e" />
-              <span>Real-Time In-Memory Evaluation</span>
-            </div>
           </div>
         </motion.div>
 

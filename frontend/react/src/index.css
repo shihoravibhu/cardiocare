@@ -37,7 +37,8 @@
 }
 
 html {
-  scroll-behavior: auto !important;
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -684,17 +685,6 @@ body {
   font-size: 17px;
 }
 
-.hero-ecg-badge {
-  position: absolute;
-  right: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 600;
-}
-
 /* Predictor Presets Bar */
 .predictor-presets-bar {
   display: flex;
@@ -1101,9 +1091,6 @@ body {
     width: 100%;
     padding: 14px 24px;
     font-size: 15px;
-  }
-  .hero-ecg-badge {
-    display: none;
   }
   .predictor-presets-bar {
     display: grid;

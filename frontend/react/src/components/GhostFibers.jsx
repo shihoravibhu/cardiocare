@@ -240,8 +240,6 @@ const GhostFibers = ({
     let frameId = 0;
     let elapsed = 0;
     let previousTime = performance.now();
-    let lastRenderTime = 0;
-    let frameRate = 60;
     let isPaused = false;
     let isVisible = true;
     let isPageVisible = !document.hidden;
@@ -262,11 +260,9 @@ const GhostFibers = ({
       previousTime = now;
       elapsed += delta;
 
-      if (now - lastRenderTime >= 1000 / frameRate - 0.5) {
-        program.uniforms.uTime.value = elapsed;
-        render();
-        lastRenderTime = now;
-      }
+      // Native 120Hz / 144Hz high refresh rate synchronization
+      program.uniforms.uTime.value = elapsed;
+      render();
 
       frameId = requestAnimationFrame(loop);
     };
@@ -325,8 +321,8 @@ const GhostFibers = ({
           render();
         }
       },
-      setFps(value) {
-        frameRate = Math.min(Math.max(value, 1), 120);
+      setFps() {
+        // Native 120Hz/144Hz high refresh rate is active without throttling
       }
     });
 

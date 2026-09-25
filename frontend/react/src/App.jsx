@@ -55,7 +55,7 @@ function App() {
           blueBoost={1.22}
           vignette={0.82}
           grain={0.03}
-          dpr={1.5}
+          dpr={typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.25}
         />
         <div className="ghost-fibers-overlay"></div>
       </div>
