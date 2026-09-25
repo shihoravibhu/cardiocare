@@ -8,6 +8,7 @@ import joblib
 import warnings
 import json
 import os
+import time
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -105,6 +106,7 @@ class PredictionResponse(BaseModel):
     risk_label: str = Field(description="'Low Risk' or 'High Risk'")
     model_used: str = Field(description="Name and badge of model architecture used")
     derived_features: DerivedFeatures
+    latency_ms: Optional[float] = Field(default=None, description="Model inference latency in milliseconds")
 
 
 @app.get("/")
@@ -188,10 +190,12 @@ def predict_risk(data: PatientData, model_type: Optional[str] = Query(default=No
         }
     )
 
+    t_start = time.perf_counter()
     try:
         prediction = int(active_model.predict(input_data)[0])
         probabilities = active_model.predict_proba(input_data)[0]
         probability = float(probabilities[1])
+        inference_ms = round((time.perf_counter() - t_start) * 1000, 1)
     except Exception as exc:
         raise HTTPException(
             status_code=500,
@@ -209,4 +213,5 @@ def predict_risk(data: PatientData, model_type: Optional[str] = Query(default=No
             "pulse_pressure": pulse_pressure,
             "hypertension": hypertension,
         },
+        "latency_ms": inference_ms,
     }
