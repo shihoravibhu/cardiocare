@@ -15,6 +15,9 @@ export default function Preloader({ onComplete }) {
     const img = new Image();
     img.src = heroImg;
 
+    // Pre-warm backend cloud container
+    fetch('https://cardiocare-5ogg.onrender.com/health', { mode: 'cors' }).catch(() => {});
+
     // 2. Track Window Full Load
     if (document.readyState === 'complete') {
       windowLoaded = true;

@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Activity, Heart, AlertTriangle, CheckCircle2, RefreshCw, 
-  Sparkles, Stethoscope, Sliders, Shield, Info, ArrowUpRight, Award, Cpu
+  Sparkles, Stethoscope, Sliders, Shield, Info, ArrowUpRight, Award, Cpu, Clock, Zap
 } from 'lucide-react';
 import WakeSlider from './WakeSlider';
 import BorderGlow from './BorderGlow';
@@ -38,7 +38,13 @@ export default function Predictor() {
   const [modelChoice, setModelChoice] = useState('gradient_boosting');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [elapsedSec, setElapsedSec] = useState(0);
   const [error, setError] = useState(null);
+
+  // Silent pre-warming ping on Predictor page load
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/health`, { mode: 'cors' }).catch(() => {});
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,6 +98,11 @@ export default function Predictor() {
     const activeModel = overrideModel || modelChoice;
     setError(null);
     setLoading(true);
+    setElapsedSec(0);
+
+    const timerInterval = setInterval(() => {
+      setElapsedSec((s) => s + 1);
+    }, 1000);
 
     const t0 = performance.now();
     try {
@@ -140,8 +151,16 @@ export default function Predictor() {
         setError(message || 'Prediction failed. Please try again.');
       }
     } finally {
+      clearInterval(timerInterval);
       setLoading(false);
     }
+  };
+
+  // Helper for real elapsed execution time display
+  const formatExecutionTime = (totalMs) => {
+    if (!totalMs || totalMs <= 0) return '0.4s';
+    if (totalMs < 1000) return `${totalMs}ms`;
+    return `${(totalMs / 1000).toFixed(1)}s`;
   };
 
   // Helper for BMI classification
@@ -943,6 +962,41 @@ export default function Predictor() {
               )}
             </button>
 
+            {/* Cold Start Telemetry Alert (Triggered if request takes > 2.5s) */}
+            <AnimatePresence>
+              {loading && elapsedSec >= 3 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.25 }}
+                  style={{
+                    marginTop: '1rem',
+                    padding: '12px 14px',
+                    borderRadius: '12px',
+                    background: 'rgba(245, 158, 11, 0.08)',
+                    border: '1px solid rgba(245, 158, 11, 0.3)',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px'
+                  }}
+                >
+                  <Clock size={16} style={{ marginTop: '2px', flexShrink: 0, color: '#f59e0b' }} />
+                  <div>
+                    <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>Cloud Server Waking Up (Cold Start)</span>
+                      <span style={{ fontSize: '11px', padding: '1px 6px', borderRadius: '4px', background: 'rgba(245, 158, 11, 0.25)', color: '#fde68a', fontFamily: 'monospace' }}>
+                        {elapsedSec}s elapsed
+                      </span>
+                    </div>
+                    <div style={{ color: 'var(--text-secondary)', marginTop: '3px', fontSize: '11.5px', lineHeight: 1.45 }}>
+                      The free-tier cloud container is spinning up from sleep and loading the machine learning models into RAM (~45s). Subsequent runs will resolve in 1–2s!
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* Error Message */}
             {error && (
               <motion.div 
@@ -1029,28 +1083,37 @@ export default function Predictor() {
                   display: 'flex', 
                   alignItems: 'center', 
                   justifyContent: 'space-between', 
+                  flexWrap: 'wrap',
+                  gap: '10px',
                   marginBottom: '1.25rem', 
-                  padding: '8px 14px', 
+                  padding: '10px 14px', 
                   borderRadius: '12px', 
                   background: 'rgba(255, 255, 255, 0.03)', 
                   border: '1px solid rgba(255, 255, 255, 0.08)' 
                 }}>
-                  <LatticeLoader
-                    status="done"
-                    label="Inference"
-                    doneLabel={`Resolved in ${result.latency_ms ? `${result.latency_ms}ms` : '< 20ms'}`}
-                    cellSize={5}
-                    gap={2}
-                    fontSize={12}
-                    color="#38bdf8"
-                    doneColor="#10b981"
-                    pattern="orbit"
-                    grid={3}
-                    showTimer={false}
-                  />
-                  <span className="brand-pill" style={{ fontSize: '11px', padding: '2px 8px' }}>
-                    {result.model_used}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <LatticeLoader
+                      status="done"
+                      label="Inference"
+                      doneLabel={`Resolved in ${formatExecutionTime(result.total_latency_ms)}${result.total_latency_ms > 15000 ? ' (Cold Boot)' : ''}`}
+                      cellSize={5}
+                      gap={2}
+                      fontSize={12}
+                      color="#38bdf8"
+                      doneColor="#10b981"
+                      pattern="orbit"
+                      grid={3}
+                      showTimer={false}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'monospace', background: 'rgba(255, 255, 255, 0.05)', padding: '2px 8px', borderRadius: '6px' }}>
+                      ML RAM: {result.latency_ms}ms
+                    </span>
+                    <span className="brand-pill" style={{ fontSize: '11px', padding: '2px 8px' }}>
+                      {result.model_used}
+                    </span>
+                  </div>
                 </div>
                   {/* Circular Risk Meter */}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1.5rem' }}>

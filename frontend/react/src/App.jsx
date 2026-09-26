@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
@@ -28,6 +28,12 @@ function AnimatedRoutes() {
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+
+  // Pre-warm Render cloud backend on initial app mount
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || 'https://cardiocare-5ogg.onrender.com';
+    fetch(`${API_URL}/health`, { mode: 'cors' }).catch(() => {});
+  }, []);
 
   return (
     <>

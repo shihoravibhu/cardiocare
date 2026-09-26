@@ -1,0 +1,23 @@
+name: Keep Render Cloud Backend Awake
+
+on:
+  schedule:
+    # Run every 14 minutes to prevent Render free-tier instance from sleeping (spins down after 15 min of inactivity)
+    - cron: '*/14 * * * *'
+  workflow_dispatch:
+
+jobs:
+  keep-awake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping CardioCare Production API
+        run: |
+          echo "Pinging CardioCare Render backend to keep instance warm..."
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 https://cardiocare-5ogg.onrender.com/health)
+          echo "Health check response code: $STATUS_CODE"
+          if [ "$STATUS_CODE" -eq 200 ]; then
+            echo "Render backend is warm and healthy (HTTP 200)."
+          else
+            echo "Warning: Response code was $STATUS_CODE"
+          fi
